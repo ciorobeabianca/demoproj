@@ -84,7 +84,7 @@ public class FileUploadController {
   private Resource applyFilter(Resource originalResource) {
     try {
       InputStream originalInputStream = originalResource.getInputStream();
-      InputStream filteredInputStream = applyFilter(originalInputStream);
+      //InputStream filteredInputStream = applyFilter(originalInputStream);
       return new InputStreamResource(originalInputStream);
     } catch (IOException exception) {
       throw new RuntimeException(exception);
@@ -92,66 +92,13 @@ public class FileUploadController {
   }
 
   private InputStream applyFilter(InputStream originalInputStream) throws IOException {
-    Color color[];
 
     // Convert file into image form
     BufferedImage input = ImageIO.read(originalInputStream);
 
-    // Creating an object of BufferedImage to
-    // create output Image
-    BufferedImage output = new BufferedImage(
-            input.getWidth(), input.getHeight(),
-            BufferedImage.TYPE_INT_RGB);
-
-    // Setting dimensions for the image to be processed
-    int i = 0;
-    int max = 400, rad = 10;
-    int a1 = 0, r1 = 0, g1 = 0, b1 = 0;
-    color = new Color[max];
-
-    int x = 1, y = 1, x1, y1, ex = 5, d = 0;
-
-    // Running nested for loops for each pixel
-    // and blurring it
-    for (x = rad; x < input.getHeight() - rad; x++) {
-      for (y = rad; y < input.getWidth() - rad; y++) {
-        for (x1 = x - rad; x1 < x + rad; x1++) {
-          for (y1 = y - rad; y1 < y + rad; y1++) {
-            color[i++] = new Color(
-                    input.getRGB(y1, x1));
-          }
-        }
-
-        // Smoothing colors of image
-        i = 0;
-        for (d = 0; d < max; d++) {
-          a1 = a1 + color[d].getAlpha();
-        }
-
-        a1 = a1 / (max);
-        for (d = 0; d < max; d++) {
-          r1 = r1 + color[d].getRed();
-        }
-
-        r1 = r1 / (max);
-        for (d = 0; d < max; d++) {
-          g1 = g1 + color[d].getGreen();
-        }
-
-        g1 = g1 / (max);
-        for (d = 0; d < max; d++) {
-          b1 = b1 + color[d].getBlue();
-        }
-
-        b1 = b1 / (max);
-        int sum1 = (a1 << 24) + (r1 << 16)
-                + (g1 << 8) + b1;
-        output.setRGB(y, x, (int) (sum1));
-      }
-    }
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    ImageIO.write(output, "jpeg", outputStream);
+    ImageIO.write(input, "jpeg", outputStream);
     outputStream.flush();
     return new ByteArrayInputStream( outputStream.toByteArray());
   }
