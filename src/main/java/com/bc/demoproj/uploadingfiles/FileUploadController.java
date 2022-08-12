@@ -93,14 +93,20 @@ public class FileUploadController {
 
   private InputStream applyFilter(InputStream originalInputStream) throws IOException {
 
-    // Convert file into image form
     BufferedImage input = ImageIO.read(originalInputStream);
-
+    BufferedImage output = applyFilter(input);
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    ImageIO.write(input, "jpeg", outputStream);
-    outputStream.flush();
+    ImageIO.write(output, "jpeg", outputStream);
     return new ByteArrayInputStream( outputStream.toByteArray());
   }
 
+  private BufferedImage applyFilter(BufferedImage originalImage){
+    BufferedImage filteredImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType());
+    Graphics graphics = filteredImage.getGraphics();
+    graphics.drawImage(originalImage, 0, 0, null);
+    graphics.dispose();
+    return filteredImage;
+
+  }
 }
