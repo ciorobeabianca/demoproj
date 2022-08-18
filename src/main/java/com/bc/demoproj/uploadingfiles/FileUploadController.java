@@ -26,8 +26,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bc.demoproj.uploadingfiles.filters.Blur;
-import com.bc.demoproj.uploadingfiles.filters.Brighten;
-import com.bc.demoproj.uploadingfiles.filters.Darken;
+import com.bc.demoproj.uploadingfiles.filters.Exposure;
 import com.bc.demoproj.uploadingfiles.filters.Filter;
 import com.bc.demoproj.uploadingfiles.storage.StorageFileNotFoundException;
 import com.bc.demoproj.uploadingfiles.storage.StorageService;
@@ -77,11 +76,11 @@ public class FileUploadController {
           filteredResource = applyFilter(originalResource, blur);
           break;
         case "brighten":
-          Filter brighten = new Brighten();
+          Filter brighten = new Exposure();
           filteredResource = applyFilter(originalResource, brighten);
           break;
         case "darken":
-          Filter darken = new Darken();
+          Filter darken = new Exposure(-30);
           filteredResource = applyFilter(originalResource, darken);
           break;
         default:
