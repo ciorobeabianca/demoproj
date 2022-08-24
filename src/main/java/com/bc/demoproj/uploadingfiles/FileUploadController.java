@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bc.demoproj.uploadingfiles.filters.Blur;
 import com.bc.demoproj.uploadingfiles.filters.Exposure;
 import com.bc.demoproj.uploadingfiles.filters.Filter;
+import com.bc.demoproj.uploadingfiles.filters.Original;
 import com.bc.demoproj.uploadingfiles.storage.StorageFileNotFoundException;
 import com.bc.demoproj.uploadingfiles.storage.StorageService;
 
@@ -67,26 +68,25 @@ public class FileUploadController {
 
     Resource originalResource = storageService.loadAsResource(filename);
     Resource filteredResource;
+    Filter filter;
     if(filterName == null){
       filteredResource = originalResource;
     } else {
       switch (filterName) {
         case "blur":
-          Filter blur = new Blur();
-          filteredResource = applyFilter(originalResource, blur);
+          filter = new Blur();
           break;
         case "brighten":
-          Filter brighten = new Exposure();
-          filteredResource = applyFilter(originalResource, brighten);
+          filter = new Exposure(30);
           break;
         case "darken":
-          Filter darken = new Exposure(-30);
-          filteredResource = applyFilter(originalResource, darken);
+          filter = new Exposure(-30);
           break;
         default:
-          filteredResource = originalResource;
+          filter = new Original();
           break;
       }
+      filteredResource = applyFilter(originalResource,filter);
     }
 
     //Resource filteredResource = applyFilter(originalResource);

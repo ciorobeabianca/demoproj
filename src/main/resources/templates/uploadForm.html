@@ -18,7 +18,9 @@
 		<ul>
 			<!--/*@thymesVar id="files" type=""*/-->
 			<li th:each="file : ${files}">
-				<a th:href="${file}" th:text="${file}" />
+				<a th:href="${file}" th:text="Original" />
+				<a th:href="${file} + '/blur'" th:text="Blur" />
+				<a th:href="${file} + '/brighten'" th:text="Brighten" />
 			</li>
 		</ul>
 	</div>

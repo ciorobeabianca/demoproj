@@ -20,7 +20,7 @@ public class Exposure implements Filter{
     BufferedImage filteredImage = new BufferedImage(originalImage.getWidth(),
             originalImage.getHeight(), originalImage.getType());
 
-    int i = 0, j =0, r, b, g;
+    int i = 0, j =0;
     int max = 400, rad = this.factor;
 
     Color color;
@@ -30,15 +30,7 @@ public class Exposure implements Filter{
       for (j = 0; j < originalImage.getWidth(); j++) {
         currentCol = new Color(
                 originalImage.getRGB(j,i));
-        r = currentCol.getRed() + rad;
-        g = currentCol.getGreen() + rad;
-        b = currentCol.getBlue() + rad;
-
-        r = checkBounds(r);
-        g = checkBounds(g);
-        b = checkBounds(b);
-
-        color = new Color(r,g,b);
+        color = getColor(rad, currentCol);
         filteredImage.setRGB(j,i,color.getRGB());
       }
     }
@@ -48,12 +40,30 @@ public class Exposure implements Filter{
     return filteredImage;
   }
 
+  private Color getColor(int exposureFactor, Color currentCol) {
+    int r, g, b;
+    Color color;
+
+    r = currentCol.getRed() + exposureFactor;
+    g = currentCol.getGreen() + exposureFactor;
+    b = currentCol.getBlue() + exposureFactor;
+
+    r = checkBounds(r);
+    g = checkBounds(g);
+    b = checkBounds(b);
+
+    color = new Color(r,g,b);
+    return color;
+  }
+
   private int checkBounds(int colorValue){
+    
     if (colorValue < 0) {
-      colorValue = 0;
+      return 0;
     }
+    
     if(colorValue > 255){
-      colorValue = 255;
+      return 255;
     }
 
     return colorValue;
